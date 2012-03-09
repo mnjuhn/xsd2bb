@@ -1,0 +1,47 @@
+xsd2bb -- generate backbone model classes in coffeescript from XML Schema
+
+Synopsis
+========
+
+The package contains the following tools:
+
+  xsd2bb <input-schema.xsd> <output-dir-name>
+  
+    Generate model class files from schema.
+
+  validate <input.xml> <schema.xsd>
+  
+    Validate XML file against schema.
+  
+  ppxml
+  
+    Prettyprint XML (generic, no schema) uing XSL
+
+Prerequisites
+=============
+
+Install ruby first, then rubygems, and then the nokigiri gem.
+
+For the native windows ruby installer, start here: http://www.ruby-lang.org/en/downloads/
+
+This also installs rubygems. On other platforms (linux,mac, cygwin, etc), rubygems must be installed separately from your package manager or from source at http://rubyforge.org/projects/rubygems/
+
+Finally:
+
+  gem install nokigiri
+ 
+(You may need sudo for some of the above.)
+
+Running xsd2bb
+==============
+
+Executables are in bin/ and they reference library files in lib/. If you move the bin files relative to lib/, be sure to adjust your RUBYLIB so that the libs are found. Run with the -h or --help options to see the syntax.
+
+Testing
+=======
+
+Run the tests like this:
+
+  rake test
+
+The expected/actual test has output that is particularly useful: a diff of the previously generated code with the currently generated code. This either says "passed" or gives quick feedback on what has changed. If you are satisfied with the changes, run 'rake test:update_expected' to store the new output for future diffs. This is independent of git versioning, except that the expected files are versioned. The expected files are in test/expected. TODO: pass the expected dir as a param?
