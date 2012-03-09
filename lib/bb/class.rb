@@ -1,5 +1,4 @@
 require 'bb/generative'
-require 'bb/typemap'
 require 'bb/const'
 require 'bb/var'
 
@@ -211,7 +210,7 @@ module BB
       var_name = "text" # NOT: e.attributes["name"].value
       xs_type = e["type"] || 
         e.xpath('xs:simpleType/xs:restriction').first["base"]
-      var_type = VAR_TYPE_FROM_SIMPLE_XS_TYPE[xs_type]
+      var_type = Var::VAR_TYPE_FROM_SIMPLE_XS_TYPE[xs_type]
       var_type or raise "No type for #{xs_type.inspect}"
       vars << Var.new(self, var_name, var_type,
         :xml_storage_class => Var::XML_STORAGE_TEXT)
@@ -219,15 +218,15 @@ module BB
 
     def gen_lines
       lines = []
-      lines << "class #{name} {"
+      lines << "class #{name}" ### extends Backbone.Model
       
       if dim
-        lines << ["@dim = #{dim};"]
-        lines << ["@delims = #{delims.inspect};"]
+        lines << ["@dim = #{dim}"]
+        lines << ["@delims = #{delims.inspect}"]
       end
 
       if cell_type
-        lines << ["@cell_type = #{cell_type.inspect};"]
+        lines << ["@cell_type = #{cell_type.inspect}"]
       end
 
       lines << [
@@ -258,11 +257,11 @@ module BB
       ]
       
       lines << "# #{name} Constants"
-      lines << consts.map {|const| const.gen_lines}
+      lines << consts.map {|const| const.gen_lines}.compact
       lines << ""
       
       lines << "# #{name} Instance Variables"
-      lines << vars.map {|var| var.gen_lines}
+      lines << vars.map {|var| var.gen_lines}.compact
       lines << ""
     end
     

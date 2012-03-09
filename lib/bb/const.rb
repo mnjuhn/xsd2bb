@@ -20,7 +20,7 @@ module BB
     end
     
     def gen_lines
-      "@#{name} = #{value.inspect};"
+      "@#{name} = #{value.inspect}"
     end
   end
 end

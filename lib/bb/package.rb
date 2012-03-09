@@ -63,6 +63,8 @@ module BB
     
     def gen_string_from_class cl
       class_lines = cl.gen_lines
+require 'pp'
+pp [cl.name, class_lines]
       gen_string {class_lines}
     end
     

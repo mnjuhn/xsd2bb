@@ -1,5 +1,4 @@
 require 'bb/generative'
-require 'bb/typemap'
 
 module BB
   class Var
@@ -269,34 +268,34 @@ module BB
     # +xml+ is string containing code that references the
     # XML object. We assume that 'this' is the object to be exported.
     def gen_xml_exporter(xml)
+      ### Need to fix the generated code below to work using some other xml api (jquery?)
       case xml_storage_class
       when XML_STORAGE_ATTRIBUTE
         xn = xml_name
         
         if default
-          "if ((#{name} as Object) != null && #{name} != #{default}) {#{xml}.@#{xn} = #{name}}"
+          "if #{name} != null && #{name} != #{default} then #{xml}.@#{xn} = #{name}"
         else
-          "#{xml}.@#{xn} = #{name};"
+          "#{xml}.@#{xn} = #{name}"
         end
 
       when XML_STORAGE_SUBELEMENT
         if collection
-          "for each (var a_#{name} in (#{name} || [])) {#{xml}.appendChild(a_#{name}.to_xml())}"
+          "#{xml}.appendChild(a_#{name}.to_xml()) for var a_#{name} in (#{name} || [])"
         else
-          "if (#{name}) {#{xml}.appendChild(#{name}.to_xml())}"
+          "#{xml}.appendChild(#{name}.to_xml()) if #{name}"
         end
 
       when XML_STORAGE_TEXT
         delims = bb_class.delims
         if delims
           if bb_class.cells_are_ids
-            "#{xml}.appendChild(new XML(ArrayText.emit((#{name}||[]).map(function(x){return x.id}), delims)));"
+            "#{xml}.appendChild(new XML(ArrayText.emit((#{name}||[]).map((x) -> x.id), delims)))"
           else
-            "#{xml}.appendChild(new XML(ArrayText.emit((#{name}||[]), delims)));"
+            "#{xml}.appendChild(new XML(ArrayText.emit((#{name}||[]), delims)))"
           end
         else
-          ### if bb_class.cells_are_ids
-          "#{xml}.appendChild(new XML(ArrayText.emit((#{name}||[]))));"
+          "#{xml}.appendChild(new XML(ArrayText.emit((#{name}||[]))))"
         end
         # Note: the "new XML(...)" is because of a change between Flash 9 and
         # Flash 10. Without this, the string is added as a subelement of
@@ -322,7 +321,7 @@ module BB
     def gen_inspect(ary_name)
       s =
         if collection
-          "(#{name} && '[' + #{name}.map(function(x){return x && (indenter + '  ' + x.inspect(depth, indent, orig_depth+1));}) + ']')"
+          "(#{name} && '[' + #{name}.map((x) -> x && (indenter + '  ' + x.inspect(depth, indent, orig_depth+1))) + ']')"
         else
           case type
           when "String"
@@ -333,7 +332,7 @@ module BB
           
           when "Array"
             if bb_class.cells_are_ids
-              %{(ArrayText.emit((#{name}||[]).map(function(x){return x.inspect(depth, indent, orig_depth+1)}), delims, indenter))}
+              %{(ArrayText.emit((#{name}||[]).map((x) -> x.inspect(depth, indent, orig_depth+1)), delims, indenter))}
             else
               %{(ArrayText.emit((#{name}||[]), delims, indenter))}
             end
@@ -354,7 +353,7 @@ module BB
           end
         end
 
-      "#{ary_name}.push(' #{name}: ' + #{s});"
+      "#{ary_name}.push(' #{name}: ' + #{s})"
     end
   end
 end

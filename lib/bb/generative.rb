@@ -4,7 +4,7 @@ module BB
   # representing indented code blocks.
   module Generative
     def gen_string(&block)
-      indent(gen_lines(&block)).join("\n")
+      indent(gen_lines(&block).compact).join("\n")
     end
     
     # expand nested arrays, adding indentation
