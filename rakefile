@@ -1,0 +1,51 @@
+# See README for basic usage.
+
+#== Helpers
+
+#== Tasks
+
+desc "alias to test:run"
+task :test => "test:run"
+  
+namespace :test do
+  desc "run the unit tests"
+  task :run do
+    sh "cd test && ruby test.rb"
+  end
+end
+
+##obsolete, but reusable
+desc "validate sample files"
+task :valid => :bin do
+#  Dir["test/input/**/*.xml"].each do |filename|
+#    sh "ruby bin/validate -v #{filename} test/input/aurora.xsd || true"
+#  end
+end
+
+lib_files = FileList["lib/**/*.rb"]
+bin_files = FileList["bin/xsd2as3", "bin/validate"]
+
+desc "run bin, test, valid tasks"
+task :default => [:bin, :test, :valid]
+
+desc "make the programs in bin/"
+task :bin => bin_files
+
+file "bin/xsd2as3" => ["bin/xsd2as3.rb", *lib_files] do |t|
+  deps = lib_files.map do |file|
+    feature = file[/^lib\/(.*).rb$/,1]
+    "#{feature}=#{file}"
+  end
+  sh "bin/darb bin/xsd2as3.rb #{deps.join(" ")} >#{t.name} &&
+      chmod +x #{t.name}"
+end
+
+file "bin/validate" => ["bin/validate.rb", "lib/validate.rb"] do |t|
+  sh "bin/darb bin/validate.rb validate=lib/validate.rb > #{t.name} &&
+      chmod +x #{t.name}"
+end
+
+desc "remove generated files"
+task :clean do
+  rm_f bin_files
+end

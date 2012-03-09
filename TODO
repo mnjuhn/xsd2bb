@@ -1,0 +1,7 @@
+
+adapt the lib/template files as described in lib/template/README
+
+translate lib/util from as3 to coffeescript as described in lib/util/README
+
+fix the xml import/export functions using jquery (see class.rb and var.rb)
+
