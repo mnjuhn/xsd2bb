@@ -44,4 +44,4 @@ Run the tests like this:
 
   rake test
 
-The expected/actual test has output that is particularly useful: a diff of the previously generated code with the currently generated code. This either says "passed" or gives quick feedback on what has changed. If you are satisfied with the changes, run 'rake test:update_expected' to store the new output for future diffs. This is independent of git versioning, except that the expected files are versioned. The expected files are in test/expected. TODO: pass the expected dir as a param?
+The expected/actual test has output that is particularly useful: a diff of the previously generated code with the currently generated code. This either says "passed" or gives quick feedback on what has changed.

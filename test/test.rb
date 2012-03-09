@@ -1,6 +1,7 @@
 libdir = File.expand_path('../lib', File.dirname(__FILE__))
 $LOAD_PATH.unshift libdir
 
+require 'fileutils'
 require 'xsd2bb'
 
 # This test reads the xsd and the _expected_ as3 files from input dir,
@@ -9,10 +10,15 @@ require 'xsd2bb'
 # Then it recursively compares the dirs.
 # Note that the input files are in git, but the outputs are not.
 
-in_dir = "expected"
-out_dir = "output"
-
 xsd_file = ARGV[0]
+
+schema_name = File.basename(xsd_file, ".xsd")
+
+in_dir = "tmp/#{schema_name}/expected"
+out_dir = "tmp/#{schema_name}/output"
+
+FileUtils.makedirs in_dir
+FileUtils.makedirs out_dir
 
 system "rm -rf #{out_dir}"
 

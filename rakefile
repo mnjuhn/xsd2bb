@@ -1,16 +1,17 @@
 # See README for basic usage.
 
-#== Helpers
-
-#== Tasks
-
-desc "alias to test:run"
-task :test => "test:run"
+desc "alias to test:aurora"
+task :test => "test:aurora"
   
 namespace :test do
-  desc "run the unit tests"
-  task :run do
-    sh "cd test && ruby test.rb"
+  desc "run the tests on aurora"
+  task :aurora do
+    sh "cd test && ruby test.rb schemas/aurora.xsd"
+  end
+
+  desc "run the tests on sirius"
+  task :sirius do
+    sh "cd test && ruby test.rb schemas/sirius.xsd"
   end
 end
 
@@ -23,7 +24,7 @@ task :valid => :bin do
 end
 
 lib_files = FileList["lib/**/*.rb"]
-bin_files = FileList["bin/xsd2as3", "bin/validate"]
+bin_files = FileList["bin/xsd2bb", "bin/validate"]
 
 desc "run bin, test, valid tasks"
 task :default => [:bin, :test, :valid]
@@ -31,12 +32,12 @@ task :default => [:bin, :test, :valid]
 desc "make the programs in bin/"
 task :bin => bin_files
 
-file "bin/xsd2as3" => ["bin/xsd2as3.rb", *lib_files] do |t|
+file "bin/xsd2bb" => ["bin/xsd2bb.rb", *lib_files] do |t|
   deps = lib_files.map do |file|
     feature = file[/^lib\/(.*).rb$/,1]
     "#{feature}=#{file}"
   end
-  sh "bin/darb bin/xsd2as3.rb #{deps.join(" ")} >#{t.name} &&
+  sh "bin/darb bin/xsd2bb.rb #{deps.join(" ")} >#{t.name} &&
       chmod +x #{t.name}"
 end
 

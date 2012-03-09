@@ -1,8 +1,10 @@
 Note: sections of code that need work are marked with '###'
 
-adapt the lib/template files as described in lib/template/README
+- replace the "package" construct with some BB/CS friendly namespace
 
-translate lib/util from as3 to coffeescript as described in lib/util/README
+- adapt the lib/template files as described in lib/template/README
 
-fix the xml import/export functions using jquery (see class.rb and var.rb)
+- translate lib/util from as3 to coffeescript as described in lib/util/README
+
+- fix the xml import/export functions using jquery (see class.rb and var.rb)
 
