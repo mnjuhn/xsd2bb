@@ -42,6 +42,20 @@ Testing
 
 Run the tests like this:
 
-  rake test
+  rake test         # same as test:aurora
+  rake test:aurora
+  rake test:sirius
 
-The expected/actual test has output that is particularly useful: a diff of the previously generated code with the currently generated code. This either says "passed" or gives quick feedback on what has changed.
+One of these tasks runs the generator on the specified schema (test/schemas/aurora.xsd for example). Then it compares the output to the output of a previous run. More precisely, the newly generated output goes into
+
+  test/tmp/{aurora,sirius}/output
+
+and that is compared with
+
+  test/tmp/{aurora,sirius}/expected
+
+The two dirs are compared with diff and displays either "passed" or the details of the diff.
+
+After checking that the changes are acceptable, you can copy the recent output to the expected by running:
+
+  rake test:update_expected

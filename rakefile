@@ -13,6 +13,11 @@ namespace :test do
   task :sirius do
     sh "cd test && ruby test.rb schemas/sirius.xsd"
   end
+  
+  desc "copy most recent output dirs into expected dirs"
+  task :update_expected do
+    sh "cd test && ruby test.rb --update-expected"
+  end
 end
 
 ##obsolete, but reusable
