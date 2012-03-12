@@ -82,6 +82,7 @@ module BB
     
     def populate_from_element e, package
       @xml_name = @name = e.attributes["name"].value
+      @package_name = package.name
       fix_name!
       
       populate_vars_from_element(e)
@@ -218,7 +219,7 @@ module BB
 
     def gen_lines
       lines = []
-      lines << "class #{name}" ### extends Backbone.Model
+      lines << "window.#{@package_name}.#{name} = Backbone.model.extend("
       
       if dim
         lines << ["@dim = #{dim}"]
@@ -327,7 +328,7 @@ module BB
         end
       end
       
-      a << "return xml"
+      a << "xml"
       a
     end
     
