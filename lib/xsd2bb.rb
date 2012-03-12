@@ -44,11 +44,13 @@ module Xsd2bb
       exit
     end
     
+    argv[0] =~ /(\w+).xsd$/
+
     gen_opts = {
-      :pkg_name       => argv[1][/\w+$/],
+      :pkg_name       => $1, # from argv[0] regex match
       :out_dir        => argv[1]
     }
-    
+
     make_bb_dir_from_xsd_file argv[0], gen_opts do |msg|
       $stderr.print(msg || ".") if verbose
     end
@@ -73,7 +75,7 @@ module Xsd2bb
     FileUtils.makedirs out_dir # check if exists, empty, etc
     
     pkg.classes.each do |cl|
-      File.open("#{out_dir}/#{cl.name}.as", "w") do |f|
+      File.open("#{out_dir}/#{cl.name}.coffee", "w") do |f|
         yield "W" if block_given?
         f << pkg.gen_string_from_class(cl)
       end
