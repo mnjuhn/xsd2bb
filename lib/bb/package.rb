@@ -68,9 +68,7 @@ module BB
     
     def gen_lines
       lines = []
-      lines << "package #{name} {" << ""
       lines.concat yield if block_given? # concat not <<, to avoid indent
-      lines << "" << "}" << ""
       lines
     end
   end
