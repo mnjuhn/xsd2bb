@@ -248,15 +248,13 @@ module BB
         end
         
         if collection
-          "XMLListMap.from(#{xml_read}).to_a(#{type}.from_xml2, deferred, object_with_id)"
-          ### See util dir
-
+          "window.aurora.XMLListMap.from(#{xml_read}).to_a(#{type}).from_xml2, deferred, object_with_id)"
         else
           "#{type}.from_xml2(#{xml_read}, deferred, object_with_id)"
         end
       end
       
-      assign = "#{target}.#{name} = #{rhs};"
+      assign = "#{target}.#{name} = #{rhs}"
       
       if defer
         "deferred.push(-> #{assign})"
