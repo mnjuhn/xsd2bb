@@ -61,6 +61,10 @@ module BB
       @any_attr = false
       yield self if block_given?
     end
+
+    def fully_qualified_class_name 
+      "window.#{@package_name}.#{@name}"
+    end
     
     # Declare that this class is referenced from some other element.
     def referenced! ref_name
@@ -219,7 +223,7 @@ module BB
 
     def gen_lines
       lines = []
-      lines << "window.#{@package_name}.#{name} = Backbone.model.extend("
+      lines << "class #{fully_qualified_class_name} extends Backbone.Model"
       
       if dim
         lines << ["@dim = #{dim}"]
@@ -231,10 +235,10 @@ module BB
       end
 
       lines << [
-        "#{name}.from_xml1 = (xml, object_with_id) ->",
+        "@from_xml1: (xml, object_with_id) ->",
         gen_from_xml_body(), "",
         
-        "#{name}.from_xml2 = (xml, deferred, object_with_id) ->",
+        "@from_xml2 (xml, deferred, object_with_id) ->",
         gen_from_xml2_body(), "",
         
         "to_xml: ->",
@@ -252,7 +256,7 @@ module BB
           "#{name}.from_xml1(to_xml(), {})"
         ], "",
         
-        "make_tree():Array {",
+        "make_tree: ->",
         gen_make_tree(),
         "}", ""
       ]
@@ -268,8 +272,8 @@ module BB
     
     def gen_from_xml_body
       a = []
-      a << "var deferred = []"
-      a << "var obj = from_xml2(xml, deferred, object_with_id)"
+      a << "deferred = []"
+      a << "obj = from_xml2(xml, deferred, object_with_id)"
       a << "for fn in deferred"
       a << ["fn()"]
       a << "obj"
@@ -281,7 +285,7 @@ module BB
       
       a << "return null if not xml"
       
-      a << "obj = new #{name}"
+      a << "obj = new #{fully_qualified_class_name}"
       vars.each do |var|
         code = var.gen_xml_importer("obj", "xml")
         case code
