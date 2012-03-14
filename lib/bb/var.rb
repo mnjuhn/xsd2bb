@@ -171,13 +171,12 @@ module BB
     def gen_xml_importer(target, xml)
       defer = false
       
-      ### Need to fix the generated code below to work using some other xml api (jquery?)
       xml_read =
         case xml_storage_class
         when XML_STORAGE_ATTRIBUTE
           n = xml_name
           if default
-            "(#{xml}.@#{name}.length() == 0 ? #{default} : #{xml}.@#{n})"
+            "(#{xml}.#{name}.length() == 0 ? #{default} : #{xml}.#{n})"
           else
             "#{xml}.@#{n}"
           end
@@ -254,7 +253,7 @@ module BB
         end
       end
       
-      assign = "#{target}.#{name} = #{rhs}"
+      assign = "#{target}.set(\"#{name}\", #{rhs})"
       
       if defer
         "deferred.push(-> #{assign})"
