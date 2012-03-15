@@ -171,14 +171,15 @@ module BB
     def gen_xml_importer(target, xml)
       defer = false
       
+      xml_find = xml_name ? "#{xml_name} = xml.find('#{xml_name}')" : ""
       xml_read =
         case xml_storage_class
         when XML_STORAGE_ATTRIBUTE
           n = xml_name
           if default
-            "(#{xml}.#{name}.length() == 0 ? #{default} : #{xml}.#{n})"
+            "(#{xml_name}.length() == 0 ? #{default} : #{xml_name})"
           else
-            "#{xml}.@#{n}"
+            "#{xml}.#{n}"
           end
         
         when XML_STORAGE_SUBELEMENT
@@ -215,7 +216,8 @@ module BB
         
     ### Port to CS:
     %{function(){
-      var par_obj = {};
+      par_obj = {}
+      pars = pars_xml.find("parameters")
       for each (var pars_xml in #{xml_read}) {
         for each (var par_xml in pars_xml.parameter) {
           par_obj[par_xml.@name] = par_xml.@value.toString();
@@ -253,7 +255,7 @@ module BB
         end
       end
       
-      assign = "#{target}.set(\"#{name}\", #{rhs})"
+      assign = [xml_find, "#{target}.set '#{name}', #{rhs}"]
       
       if defer
         "deferred.push(-> #{assign})"
@@ -271,9 +273,10 @@ module BB
         xn = xml_name
         
         if default
-          "if #{name} != null && #{name} != #{default} then #{xml}.@#{xn} = #{name}"
+          "if @has('#{name}') && @#{name} != #{default} " +
+            "then #{xml}.#{xn} = @get('#{name}')"
         else
-          "#{xml}.@#{xn} = #{name}"
+          "#{xml}.#{xn} = @#{name}"
         end
 
       when XML_STORAGE_SUBELEMENT
