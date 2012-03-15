@@ -6,7 +6,7 @@ window.aurora.Demand.defaults
 window.aurora.Demand::resolve_references = (deferred, object_with_id) ->
   self = @
   deferred.push ->
-    @set 'link', object_with_id.link[@get('link_id')]
+    link = object_with_id.link[@get('link_id')]
     throw "Demand instance can't find link for obj id == #{link_id}" unless link
     link.set 'demand', self
 
