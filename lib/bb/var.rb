@@ -241,7 +241,7 @@ module BB
         end
 
         args = [xml_read, "delims", cell_type.inspect, id_map_name]
-        "ArrayText.parse(#{args.join(", ")}) as Array" ### See util dir
+        "ArrayText.parse(#{args.join(", ")})" ### See util dir
 
       else # complex object or collection-based class (our class, not Array)
         unless xml_storage_class == XML_STORAGE_SUBELEMENT
