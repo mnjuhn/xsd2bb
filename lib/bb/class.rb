@@ -315,7 +315,7 @@ module BB
     
     def gen_to_xml_body
       a = []
-      a << "xml = doc.createElement('xml:document','#{@xml_name}', null)"
+      a << "xml = doc.createElement('#{@xml_name}')"
       
       a << "if @encode_references"
       a << [
