@@ -267,7 +267,6 @@ module BB
     # +xml+ is string containing code that references the
     # XML object. We assume that 'this' is the object to be exported.
     def gen_xml_exporter(xml)
-      ### Need to fix the generated code below to work using some other xml api (jquery?)
       case xml_storage_class
       when XML_STORAGE_ATTRIBUTE
         xn = xml_name
@@ -281,34 +280,34 @@ module BB
 
       when XML_STORAGE_SUBELEMENT
         if collection
-          "#{xml}.appendChild(a_#{name}.to_xml()) for var a_#{name} in (#{name} || [])"
+          "_.each(@get('#{name}') || [], " +
+          "(a_#{name}) -> #{xml}.appendChild(a_#{name}.to_xml()))"
         else
-          "#{xml}.appendChild(#{name}.to_xml()) if #{name}"
+          "#{xml}.appendChild(@get('#{name}').to_xml()) if @has('#{name}')"
         end
 
       when XML_STORAGE_TEXT
         delims = bb_class.delims
         if delims
           if bb_class.cells_are_ids
-            "#{xml}.appendChild(new XML(ArrayText.emit((#{name}||[]).map((x) -> x.id), delims)))"
+            "#{xml}.appendChild(doc.createTextNode(ArrayText.emit((#{name} || []).map((x) -> x.id), delims))))"
           else
-            "#{xml}.appendChild(new XML(ArrayText.emit((#{name}||[]), delims)))"
+            "#{xml}.appendChild(doc.createTextNode(ArrayText.emit(#{name} || [], delims))))"
           end
         else
-          "#{xml}.appendChild(new XML(ArrayText.emit((#{name}||[]))))"
+          "#{xml}.appendChild(doc.createTextNode(ArrayText.emit(#{name} || [])))"
         end
       
       when XML_STORAGE_PARAMETERS
-   %{if (#{name}) {
-      var parameters_xml = <parameters/>;
-      for (var par_name:String in #{name}) {
-        var parameter_xml = <parameter/>;
-        parameter_xml.@name = par_name;
-        parameter_xml.@value = #{name}[par_name];
-        parameters_xml.appendChild(parameter_xml);
-      }
-      #{xml}.appendChild(parameters_xml);
-    }}
+   %{if @has('#{name}')
+      parameters_xml = doc.createElement('#{xml_name}')
+      _.each(@get('#{name}'), (par_name) ->
+          parameter_xml = doc.createElement('parameter')
+          parameter_xml.setAttribute(par_name, #{name}[par_name])
+          parameters_xml.appendChild(parameter_xml)
+      )
+      #{xml}.appendChild(parameters_xml)
+    }
 
       else raise
       end
