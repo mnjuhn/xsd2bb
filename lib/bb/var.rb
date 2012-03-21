@@ -274,9 +274,9 @@ module BB
         
         if default
           "if @has('#{name}') && @#{name} != #{default} " +
-            "then #{xml}.#{xn} = @get('#{name}')"
+            "then xml.setAttribute(#{xn}, @get('#{name}'))"
         else
-          "#{xml}.#{xn} = @#{name}"
+          "#{xml}.setAttribute('#{xn}', @get('#{name}'))"
         end
 
       when XML_STORAGE_SUBELEMENT
@@ -297,10 +297,6 @@ module BB
         else
           "#{xml}.appendChild(new XML(ArrayText.emit((#{name}||[]))))"
         end
-        # Note: the "new XML(...)" is because of a change between Flash 9 and
-        # Flash 10. Without this, the string is added as a subelement of
-        # the same type as the last added subelement, if any. See
-        # https://bugs.adobe.com/jira/browse/FP-1131
       
       when XML_STORAGE_PARAMETERS
    %{if (#{name}) {

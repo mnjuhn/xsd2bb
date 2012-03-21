@@ -238,10 +238,10 @@ module BB
         "@from_xml1: (xml, object_with_id) ->",
         gen_from_xml_body(), "",
         
-        "@from_xml2 (xml, deferred, object_with_id) ->",
+        "@from_xml2: (xml, deferred, object_with_id) ->",
         gen_from_xml2_body(), "",
         
-        "to_xml: ->",
+        "to_xml: (doc) ->",
         gen_to_xml_body(), "",
         
         "toString: ->",
@@ -309,13 +309,13 @@ module BB
         "obj.resolve_references(deferred, object_with_id)"
       ]
       
-      a << "return obj"
+      a << "obj"
       a
     end
     
     def gen_to_xml_body
       a = []
-      a << "xml = <#{@xml_name}/>;" ### need to instantiate xml element
+      a << "xml = doc.createElement('xml:document','#{@xml_name}', null)"
       
       a << "if @encode_references"
       a << [
@@ -374,7 +374,7 @@ module BB
       end
       
       a << "a.push('>')"
-      a << "return a.join('')"
+      a << "a.join('')"
       a
     end
     
