@@ -184,16 +184,16 @@ module BB
         
         when XML_STORAGE_SUBELEMENT
           if collection
-            "#{xml}.#{xml_name}" # XMLList
+            "#{xml}.find('#{xml_name}')" # XMLList
           else
-            "#{xml}.#{xml_name}[0]" # Unique matching child
+            "#{xml}.find('#{xml_name}')[0]" # Unique matching child
           end
         
         when XML_STORAGE_PARAMETERS
-          "#{xml}.#{xml_name}"
+          "#{xml}.find('#{xml_name}')"
         
         when XML_STORAGE_TEXT
-          "#{xml}.text().toString()"
+          "#{xml}.text()"
         end
       
       rhs =
@@ -215,16 +215,12 @@ module BB
         end
         
     ### Port to CS:
-    %{function(){
-      par_obj = {}
-      pars = pars_xml.find("parameters")
-      for each (var pars_xml in #{xml_read}) {
-        for each (var par_xml in pars_xml.parameter) {
-          par_obj[par_xml.@name] = par_xml.@value.toString();
-        }
-      }
-      return par_obj;
-    }()}
+    %{_.reduce(parameters.find("parameter"),
+          (acc,par_xml) ->
+            acc[par_xml.attr('name')] = par_xml.attr('value')
+            acc
+          {}
+    )}
       
       when "Array"
         delims = bb_class.delims
@@ -249,7 +245,7 @@ module BB
         end
         
         if collection
-          "window.aurora.XMLListMap.from(#{xml_read}).to_a(#{type}).from_xml2, deferred, object_with_id)"
+          "window.aurora.XMLListMap.from(#{xml_read}).to_a(#{type}).from_xml2(deferred, object_with_id)"
         else
           "#{type}.from_xml2(#{xml_read}, deferred, object_with_id)"
         end

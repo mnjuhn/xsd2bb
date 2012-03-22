@@ -274,8 +274,7 @@ module BB
       a = []
       a << "deferred = []"
       a << "obj = from_xml2(xml, deferred, object_with_id)"
-      a << "for fn in deferred"
-      a << ["fn()"]
+      a << "fn() for fn in deferred"
       a << "obj"
       a
     end
@@ -285,7 +284,7 @@ module BB
       
       a << "return null if not xml"
       
-      a << "obj = new #{fully_qualified_class_name}"
+      a << "obj = new #{fully_qualified_class_name}()"
       vars.each do |var|
         code = var.gen_xml_importer("obj", "xml")
         case code
