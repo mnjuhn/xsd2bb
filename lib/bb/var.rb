@@ -202,10 +202,10 @@ module BB
         xml_read # no conversion needed
       
       when "int", "uint", "Number"
-        "#{type}(#{xml_read})"
+        "#{type}(#{xml_name})"
       
       when "Boolean"
-        "#{type}(#{xml_read}.toString().toLowerCase() == 'true')"
+        "(#{xml_name}.toString().toLowerCase() == 'true')"
         # toString is because Boolean defaults are literal true or false,
         # but attr values are always strings.
       
@@ -214,7 +214,6 @@ module BB
           raise "Object type must use parameter storage."
         end
         
-    ### Port to CS:
     %{_.reduce(parameters.find("parameter"),
           (acc,par_xml) ->
             acc[par_xml.attr('name')] = par_xml.attr('value')
@@ -245,13 +244,14 @@ module BB
         end
         
         if collection
-          "window.aurora.XMLListMap.from(#{xml_read}).to_a(#{type}).from_xml2(deferred, object_with_id)"
+          "_.map(#{xml_name}, (#{xml_name}_i) -> $a.#{type}.from_xml2(#{xml_name}_i, deferred, object_with_id))"
         else
-          "#{type}.from_xml2(#{xml_read}, deferred, object_with_id)"
+          "$a.#{type}.from_xml2(#{xml_name}, deferred, object_with_id)"
         end
       end
       
-      assign = [xml_find, "#{target}.set '#{name}', #{rhs}"]
+      assign = [xml_find, 
+                "#{target}.set '#{name}', #{rhs}"]
       
       if defer
         "deferred.push(-> #{assign})"
