@@ -235,6 +235,8 @@ module BB
       end
 
       lines << [
+        "### $a = alias for #{@package_name} namespace ###",
+        "$a = window.#{@package_name}", 
         "@from_xml1: (xml, object_with_id) ->",
         gen_from_xml_body(), "",
         
@@ -242,29 +244,13 @@ module BB
         gen_from_xml2_body(), "",
         
         "to_xml: (doc) ->",
-        gen_to_xml_body(), "",
-        
-        "inspect: (depth = 1, indent = false, orig_depth = -1) ->",
-        #gen_inspect_body(), "",
-        
-        "deep_copy: ->",
-        [
-          "objs = {};",
-          "#{name}.from_xml1(to_xml(), {})"
-        ], "",
-        
-        "make_tree: ->",
-        #gen_make_tree(),
-        #"}", ""
-      ]
-      
-      lines << "# #{name} Constants"
-      lines << consts.map {|const| const.gen_lines}.compact
-      lines << ""
-      
-      lines << "# #{name} Instance Variables"
-      lines << vars.map {|var| var.gen_lines}.compact
-      lines << ""
+        gen_to_xml_body(), "", 
+           
+        "deep_copy: -> #{name}.from_xml1(@to_xml(), {})",
+
+        "inspect: (depth = 1, indent = false, orig_depth = -1) -> null",       
+        "make_tree: -> null",
+     ]
     end
     
     def gen_from_xml_body
