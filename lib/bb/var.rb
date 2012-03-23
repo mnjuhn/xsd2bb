@@ -235,7 +235,7 @@ module BB
           id_map_name = "null"
         end
 
-        args = [xml_read, "delims", cell_type.inspect, id_map_name]
+        args = [xml_read, "@delims", cell_type.inspect, id_map_name]
         "$a.ArrayText.parse(#{args.join(", ")})" ### See util dir
 
       else # complex object or collection-based class (our class, not Array)
