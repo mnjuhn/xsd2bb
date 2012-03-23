@@ -236,7 +236,7 @@ module BB
         end
 
         args = [xml_read, "delims", cell_type.inspect, id_map_name]
-        "ArrayText.parse(#{args.join(", ")})" ### See util dir
+        "$a.ArrayText.parse(#{args.join(", ")})" ### See util dir
 
       else # complex object or collection-based class (our class, not Array)
         unless xml_storage_class == XML_STORAGE_SUBELEMENT
@@ -269,7 +269,7 @@ module BB
         
         if default
           "if @has('#{name}') && @#{name} != #{default} " +
-            "then xml.setAttribute(#{xn}, @get('#{name}'))"
+            "then xml.setAttribute('#{xn}', @get('#{name}'))"
         else
           "#{xml}.setAttribute('#{xn}', @get('#{name}'))"
         end
@@ -286,12 +286,12 @@ module BB
         delims = bb_class.delims
         if delims
           if bb_class.cells_are_ids
-            "#{xml}.appendChild(doc.createTextNode(ArrayText.emit((#{name} || []).map((x) -> x.id), delims))))"
+            "#{xml}.appendChild(doc.createTextNode($a.ArrayText.emit((@get('#{name}') || []).map((x) -> x.id), @delims)))"
           else
-            "#{xml}.appendChild(doc.createTextNode(ArrayText.emit(#{name} || [], delims))))"
+            "#{xml}.appendChild(doc.createTextNode($a.ArrayText.emit(@get('#{name}') || [], @delims)))"
           end
         else
-          "#{xml}.appendChild(doc.createTextNode(ArrayText.emit(#{name} || [])))"
+          "#{xml}.appendChild(doc.createTextNode($a.ArrayText.emit(@get('#{name}') || [])))"
         end
       
       when XML_STORAGE_PARAMETERS
