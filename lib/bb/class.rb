@@ -244,9 +244,6 @@ module BB
         "to_xml: (doc) ->",
         gen_to_xml_body(), "",
         
-        "toString: ->",
-        ["inspect()"], "",
-        
         "inspect: (depth = 1, indent = false, orig_depth = -1) ->",
         #gen_inspect_body(), "",
         
@@ -338,43 +335,6 @@ module BB
     ### We don't need this if there is something better in BB
     def gen_inspect_body
       a = []
-      a << "a = ['<#{name}']"
-      a << "indenter = ''"
-      
-      a << "if orig_depth == -1 then orig_depth = depth"
-      a << "depth--;"
-      a << "if depth > 0"
-      if_block = []
-      a << if_block
-      if_block << "if indent then indenter = '\\n' + StringIndenter.indent(orig_depth - depth)"
-        ### see util dir
-      if_block << "a.push(':')"
-      
-      vars.each do |var|
-        if_block << "if indent then a.push(indenter)"
-        code = var.gen_inspect("a")
-        case code
-        when Array
-          if_block.concat code
-        else
-          if_block << code
-        end
-      end
-      
-      if any_attr
-        if_block.concat [
-          "for own dyn_attr of this",
-          [
-            "if indent then a.push(indenter)",
-            "a.push(' ' + dyn_attr + ': ' + this[dyn_attr].toString())"
-              ### should recurse if needed
-          ]
-        ]
-      end
-      
-      a << "a.push('>')"
-      a << "a.join('')"
-      a
     end
     
     # Generates a function to recursively build a data structure of
@@ -385,42 +345,6 @@ module BB
     ### we probably don't need this, so it's not ported to BB yet
     def gen_make_tree
       a = []
-      # a << "var level:Array = [];"
-      # have_myself = false
-      
-      # vars.each do |var|
-      #   case var.type
-      #   when "Number", "String", "Array", "Date", "Boolean", "int", "uint"
-      #     a << %{level.push({label: "#{var.name}", object: this});}
-      #   else # complex object
-      #     if var.collection
-      #       unless have_myself
-      #         have_myself = true
-      #         a << "var myself = this;"
-      #       end
-            
-      #       c = [
-      #         "#{var.name}.map(function(x) {",
-      #         ["return x ? {",
-      #          "label: x.name || 'UNNAMED',",
-      #          "children: x.make_tree(),",
-      #          "object: myself} : {} })"]
-      #         ]
-      #     else
-      #       c = ["#{var.name} && #{var.name}.make_tree()"]
-      #     end
-      #     a << "level.push({"
-      #     a << [
-      #       "label: '#{var.name}',",
-      #       "object: this,",
-      #       "children:", c
-      #     ]
-      #     a << "});"
-      #   end
-      # end
-      
-      # a << "return level;"
-      a          
     end
   end
 end
