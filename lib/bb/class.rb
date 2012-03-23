@@ -273,7 +273,7 @@ module BB
     def gen_from_xml_body
       a = []
       a << "deferred = []"
-      a << "obj = from_xml2(xml, deferred, object_with_id)"
+      a << "obj = @from_xml2(xml, deferred, object_with_id)"
       a << "fn() for fn in deferred"
       a << "obj"
       a
