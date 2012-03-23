@@ -248,7 +248,7 @@ module BB
         ["inspect()"], "",
         
         "inspect: (depth = 1, indent = false, orig_depth = -1) ->",
-        gen_inspect_body(), "",
+        #gen_inspect_body(), "",
         
         "deep_copy: ->",
         [
@@ -257,8 +257,8 @@ module BB
         ], "",
         
         "make_tree: ->",
-        gen_make_tree(),
-        "}", ""
+        #gen_make_tree(),
+        #"}", ""
       ]
       
       lines << "# #{name} Constants"
@@ -385,41 +385,41 @@ module BB
     ### we probably don't need this, so it's not ported to BB yet
     def gen_make_tree
       a = []
-      a << "var level:Array = [];"
-      have_myself = false
+      # a << "var level:Array = [];"
+      # have_myself = false
       
-      vars.each do |var|
-        case var.type
-        when "Number", "String", "Array", "Date", "Boolean", "int", "uint"
-          a << %{level.push({label: "#{var.name}", object: this});}
-        else # complex object
-          if var.collection
-            unless have_myself
-              have_myself = true
-              a << "var myself = this;"
-            end
+      # vars.each do |var|
+      #   case var.type
+      #   when "Number", "String", "Array", "Date", "Boolean", "int", "uint"
+      #     a << %{level.push({label: "#{var.name}", object: this});}
+      #   else # complex object
+      #     if var.collection
+      #       unless have_myself
+      #         have_myself = true
+      #         a << "var myself = this;"
+      #       end
             
-            c = [
-              "#{var.name}.map(function(x) {",
-              ["return x ? {",
-               "label: x.name || 'UNNAMED',",
-               "children: x.make_tree(),",
-               "object: myself} : {} })"]
-              ]
-          else
-            c = ["#{var.name} && #{var.name}.make_tree()"]
-          end
-          a << "level.push({"
-          a << [
-            "label: '#{var.name}',",
-            "object: this,",
-            "children:", c
-          ]
-          a << "});"
-        end
-      end
+      #       c = [
+      #         "#{var.name}.map(function(x) {",
+      #         ["return x ? {",
+      #          "label: x.name || 'UNNAMED',",
+      #          "children: x.make_tree(),",
+      #          "object: myself} : {} })"]
+      #         ]
+      #     else
+      #       c = ["#{var.name} && #{var.name}.make_tree()"]
+      #     end
+      #     a << "level.push({"
+      #     a << [
+      #       "label: '#{var.name}',",
+      #       "object: this,",
+      #       "children:", c
+      #     ]
+      #     a << "});"
+      #   end
+      # end
       
-      a << "return level;"
+      # a << "return level;"
       a          
     end
   end
