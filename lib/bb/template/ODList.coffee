@@ -1,2 +1,2 @@
-window.aurora.ODList.defaults
+window.aurora.ODList::defaults =
   od: []

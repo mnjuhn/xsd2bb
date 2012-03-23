@@ -1,2 +1,2 @@
-window.aurora.Data_sources.defaults
+window.aurora.Data_sources::defaults =
   source: []

@@ -1,4 +1,4 @@
-window.aurora.Splitratios.defaults
+window.aurora.Splitratios::defaults =
   dt: 1
   start_time: 0
 

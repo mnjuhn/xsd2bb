@@ -1,2 +1,2 @@
-window.aurora.Dynamics.defaults
+window.aurora.Dynamics::defaults =
   type: "CTM"

@@ -1,2 +1,2 @@
-window.aurora.Position.defaults
+window.aurora.Position::defaults =
   point: []

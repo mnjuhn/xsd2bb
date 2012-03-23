@@ -1,4 +1,4 @@
-window.aurora.Capacity.defaults
+window.aurora.Capacity::defaults =
   dt: 1
   start_time: 0
 

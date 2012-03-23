@@ -1,4 +1,4 @@
-window.aurora.Fd.defaults
+window.aurora.Fd::defaults =
   densityCritical: 30.0
   densityJam: 150.05
   flowMax: 1800.0

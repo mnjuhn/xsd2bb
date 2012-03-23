@@ -1,2 +1,2 @@
-window.aurora.EventSet.defaults
+window.aurora.EventSet::defaults =
   event: []

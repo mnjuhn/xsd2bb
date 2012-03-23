@@ -1,2 +1,2 @@
-window.aurora.NodeList.defaults
+window.aurora.NodeList::defaults =
   node: []

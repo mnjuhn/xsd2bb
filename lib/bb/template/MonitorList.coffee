@@ -1,2 +1,2 @@
-window.aurora.MonitorList.defaults
+window.aurora.MonitorList::defaults =
   monitor: []

@@ -1,4 +1,4 @@
-window.aurora.Link.defaults
+window.aurora.Link::defaults =
   type: 'ST'
   lanes: 1
   lane_offset: 0

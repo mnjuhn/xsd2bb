@@ -1,2 +1,2 @@
-window.aurora.PathList.defaults
+window.aurora.PathList::defaults =
   path: []

@@ -1,4 +1,4 @@
-window.aurora.Signal.defaults
+window.aurora.Signal::defaults =
   phase: []
 
 window.aurora.Signal::resolve_references = (deferred, object_with_id) ->

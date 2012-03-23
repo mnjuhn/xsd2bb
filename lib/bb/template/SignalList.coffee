@@ -1,2 +1,2 @@
-window.aurora.SignalList.defaults
+window.aurora.SignalList::defaults =
   signal: []

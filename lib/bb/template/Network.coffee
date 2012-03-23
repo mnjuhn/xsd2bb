@@ -1,4 +1,4 @@
-window.aurora.Network.defaults
+window.aurora.Network::defaults =
   ml_control: false
   q_control: false
   dt: 300

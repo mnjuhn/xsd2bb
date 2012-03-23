@@ -30,7 +30,7 @@ window.aurora.Sensor::display_lng = -> @display_point().get('lng')
 window.aurora.Sensor::initialize = ->
   @set('position', new window.aurora.Position)
 
-window.aurora.Sensor.defaults
+window.aurora.Sensor::defaults =
   parameters: {}
 
 window.aurora.Sensor.from_station_row = (row) ->

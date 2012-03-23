@@ -1,2 +1,2 @@
-window.aurora.PlanSequence.defaults
+window.aurora.PlanSequence::defaults =
   plan_reference: []

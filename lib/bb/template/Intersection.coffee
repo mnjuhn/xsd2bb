@@ -1,4 +1,4 @@
-window.aurora.Intersection.defaults
+window.aurora.Intersection::defaults =
   stage: []
 
 window.aurora.Intersection::resolve_references = (deferred, object_with_id) ->

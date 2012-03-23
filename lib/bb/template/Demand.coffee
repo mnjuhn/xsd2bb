@@ -1,4 +1,4 @@
-window.aurora.Demand.defaults
+window.aurora.Demand::defaults =
   dt: 1
   knob: 1
   start_time: 0

@@ -1,2 +1,2 @@
-window.aurora.LinkList.defaults
+window.aurora.LinkList::defaults =
   link: []

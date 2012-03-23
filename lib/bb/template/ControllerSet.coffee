@@ -1,2 +1,2 @@
-window.aurora.ControllerSet.defaults
+window.aurora.ControllerSet::defaults =
   controller: []

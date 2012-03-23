@@ -1,2 +1,2 @@
-window.aurora.PlanList.defaults
+window.aurora.PlanList::defaults =
   plan: []

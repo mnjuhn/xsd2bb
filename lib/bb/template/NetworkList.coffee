@@ -1,2 +1,2 @@
-window.aurora.NetworkList.defaults
+window.aurora.NetworkList::defaults =
   network: []

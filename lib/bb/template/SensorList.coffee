@@ -1,2 +1,2 @@
-window.aurora.SensorList.defaults
+window.aurora.SensorList::defaults =
   sensor: []
