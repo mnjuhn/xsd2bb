@@ -175,6 +175,7 @@ module BB
       xml_read =
         case xml_storage_class
         when XML_STORAGE_ATTRIBUTE
+          xml_find = "#{xml_name} = $(xml).attr('#{xml_name}')"
           n = xml_name
           if default
             "(#{xml_name}.length() == 0 ? #{default} : #{xml_name})"
