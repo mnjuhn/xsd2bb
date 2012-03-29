@@ -178,7 +178,7 @@ module BB
           xml_find = "#{xml_name} = $(xml).attr('#{xml_name}')"
           n = xml_name
           if default
-            "(#{xml_name}.length() == 0 ? #{default} : #{xml_name})"
+            "(#{xml_name}.length == 0 ? #{default} : #{xml_name}) if #{xml_name}?"
           else
             "#{xml}.#{n}"
           end
@@ -200,15 +200,13 @@ module BB
       rhs =
       case type
       when "String"
-        xml_read # no conversion needed
+        xml_name
       
       when "int", "uint", "Number"
-        "#{type}(#{xml_name})"
+        "Number(#{xml_name})"
       
       when "Boolean"
-        "(#{xml_name}.toString().toLowerCase() == 'true')"
-        # toString is because Boolean defaults are literal true or false,
-        # but attr values are always strings.
+        "(#{xml_name}.toString().toLowerCase() == 'true') if #{xml_name}?"
       
       when "Object"
         unless xml_storage_class == XML_STORAGE_PARAMETERS
@@ -245,14 +243,14 @@ module BB
         end
         
         if collection
-          "_.map(#{xml_name}, (#{xml_name}_i) -> $a.#{type}.from_xml2(#{xml_name}_i, deferred, object_with_id))"
+          "_.map($(#{xml_name}), (#{xml_name}_i) -> $a.#{type}.from_xml2($(#{xml_name}_i), deferred, object_with_id))"
         else
           "$a.#{type}.from_xml2(#{xml_name}, deferred, object_with_id)"
         end
       end
       
       assign = [xml_find, 
-                "#{target}.set '#{name}', #{rhs}"]
+                "#{target}.set('#{name}', #{rhs})"]
       
       if defer
         "deferred.push(-> #{assign})"
