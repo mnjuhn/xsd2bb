@@ -265,7 +265,7 @@ module BB
     def gen_from_xml2_body
       a = []
       
-      a << "return null if not xml"
+      a << "return null if (not xml? or xml.length == 0)"
       
       a << "obj = new #{fully_qualified_class_name}()"
       vars.each do |var|
