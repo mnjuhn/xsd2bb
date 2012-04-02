@@ -215,7 +215,8 @@ module BB
         
     %{_.reduce(parameters.find("parameter"),
           (acc,par_xml) ->
-            acc[par_xml.attr('name')] = par_xml.attr('value')
+            wrapped_xml = $(par_xml);
+            acc[wrapped_xml.attr('name')] = wrapped_xml.attr('value')
             acc
           {}
     )}
@@ -253,7 +254,7 @@ module BB
                 "#{target}.set('#{name}', #{rhs})"]
       
       if defer
-        "deferred.push(-> #{assign})"
+        "deferred.push(=> #{assign})"
       else
         assign
       end
