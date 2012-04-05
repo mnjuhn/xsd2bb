@@ -213,7 +213,7 @@ module BB
           raise "Object type must use parameter storage."
         end
         
-    %{_.reduce(parameters.children("parameter"),
+    %{_.reduce(parameters.find("parameter"),
           (acc,par_xml) ->
             wrapped_xml = $(par_xml);
             acc[wrapped_xml.attr('name')] = wrapped_xml.attr('value')
