@@ -171,7 +171,7 @@ module BB
     def gen_xml_importer(target, xml)
       defer = false
       
-      xml_find = xml_name ? "#{xml_name} = xml.find('#{xml_name}')" : ""
+      xml_find = xml_name ? "#{xml_name} = xml.children('#{xml_name}')" : ""
       xml_read =
         case xml_storage_class
         when XML_STORAGE_ATTRIBUTE
@@ -185,9 +185,9 @@ module BB
         
         when XML_STORAGE_SUBELEMENT
           if collection
-            "#{xml}.find('#{xml_name}')" # XMLList
+            "#{xml}.children('#{xml_name}')" # XMLList
           else
-            "#{xml}.find('#{xml_name}')[0]" # Unique matching child
+            "#{xml}.children('#{xml_name}')[0]" # Unique matching child
           end
         
         when XML_STORAGE_PARAMETERS
@@ -213,7 +213,7 @@ module BB
           raise "Object type must use parameter storage."
         end
         
-    %{_.reduce(parameters.find("parameter"),
+    %{_.reduce(parameters.children("parameter"),
           (acc,par_xml) ->
             wrapped_xml = $(par_xml);
             acc[wrapped_xml.attr('name')] = wrapped_xml.attr('value')
@@ -250,8 +250,12 @@ module BB
         end
       end
       
-      assign = [xml_find, 
-                "#{target}.set('#{name}', #{rhs})"]
+      unless xml_storage_class == XML_STORAGE_TEXT && type == "String"
+        assign = [xml_find, 
+                  "#{target}.set('#{name}', #{rhs})"]
+      else
+        assign = ["#{target}.set('#{name}', #{xml_read})"]
+      end
       
       if defer
         "deferred.push(=> #{assign})"
