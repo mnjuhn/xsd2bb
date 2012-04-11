@@ -171,7 +171,7 @@ module BB
     def gen_xml_importer(target, xml)
       defer = false
       
-      xml_find = xml_name ? "#{xml_name} = xml.find('#{xml_name}')" : ""
+      xml_find = xml_name ? "#{xml_name} = xml.children('#{xml_name}')" : ""
       xml_read =
         case xml_storage_class
         when XML_STORAGE_ATTRIBUTE
@@ -185,9 +185,9 @@ module BB
         
         when XML_STORAGE_SUBELEMENT
           if collection
-            "#{xml}.find('#{xml_name}')" # XMLList
+            "#{xml}.children('#{xml_name}')" # XMLList
           else
-            "#{xml}.find('#{xml_name}')[0]" # Unique matching child
+            "#{xml}.children('#{xml_name}')[0]" # Unique matching child
           end
         
         when XML_STORAGE_PARAMETERS
@@ -250,8 +250,12 @@ module BB
         end
       end
       
-      assign = [xml_find, 
-                "#{target}.set('#{name}', #{rhs})"]
+      unless xml_storage_class == XML_STORAGE_TEXT && type == "String"
+        assign = [xml_find, 
+                  "#{target}.set('#{name}', #{rhs})"]
+      else
+        assign = ["#{target}.set('#{name}', #{xml_read})"]
+      end
       
       if defer
         "deferred.push(=> #{assign})"
@@ -277,9 +281,9 @@ module BB
       when XML_STORAGE_SUBELEMENT
         if collection
           "_.each(@get('#{name}') || [], " +
-          "(a_#{name}) -> #{xml}.appendChild(a_#{name}.to_xml()))"
+          "(a_#{name}) -> #{xml}.appendChild(a_#{name}.to_xml(doc)))"
         else
-          "#{xml}.appendChild(@get('#{name}').to_xml()) if @has('#{name}')"
+          "#{xml}.appendChild(@get('#{name}').to_xml(doc)) if @has('#{name}')"
         end
 
       when XML_STORAGE_TEXT
@@ -297,9 +301,9 @@ module BB
       when XML_STORAGE_PARAMETERS
    %{if @has('#{name}')
       parameters_xml = doc.createElement('#{xml_name}')
-      _.each(@get('#{name}'), (par_name) ->
+      _.each(@get('#{name}'), (par_val, par_name) ->
           parameter_xml = doc.createElement('parameter')
-          parameter_xml.setAttribute(par_name, #{name}[par_name])
+          parameter_xml.setAttribute(par_name, par_val)
           parameters_xml.appendChild(parameter_xml)
       )
       #{xml}.appendChild(parameters_xml)
