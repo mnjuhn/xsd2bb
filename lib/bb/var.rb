@@ -271,7 +271,7 @@ module BB
           "if @has('#{name}') && @#{name} != #{default} " +
             "then xml.setAttribute('#{xn}', @get('#{name}'))"
         else
-          "#{xml}.setAttribute('#{xn}', @get('#{name}'))"
+          "#{xml}.setAttribute('#{xn}', @get('#{name}')) if @has('#{name}')"
         end
 
       when XML_STORAGE_SUBELEMENT
