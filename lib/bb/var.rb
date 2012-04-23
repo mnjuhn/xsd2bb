@@ -40,6 +40,20 @@ module BB
     XML_STORAGE_SUBELEMENT  = :subelement
     XML_STORAGE_TEXT        = :text
     XML_STORAGE_PARAMETERS  = :parameters
+    RESERVED_COFFEESCRIPT_WORDS = [
+      'true', 'false', 'null', 'this',
+      'new', 'delete', 'typeof', 'in', 'instanceof',
+      'return', 'throw', 'break', 'continue', 'debugger',
+      'if', 'else', 'switch', 'for', 'while', 'do', 'try', 'catch', 'finally',
+      'extends', 'super',
+      'undefined', 'then', 'unless', 'until', 'loop', 'of', 'by', 'when',
+      'case', 'default', 'function', 'var', 'void', 'with',
+      'const', 'let', 'enum', 'export', 'import', 'native',
+      '__hasProp', '__extends', '__slice', '__bind', '__indexOf',
+      'implements', 'interface', 'let', 'package',
+      'private', 'protected', 'public', 'static', 'yield',
+      'arguments', 'eval'
+    ]
     
     # This is still useful for detecting the difference between scalar types and
     # "objects". The values in this hash are obsolete.
@@ -86,6 +100,8 @@ module BB
     #
     def self.from_xs_attribute xs_attr, bb_class
       xml_name = xs_attr.attributes["name"].value
+      xml_name += "_" if RESERVED_COFFEESCRIPT_WORDS.include?(xml_name)
+
       case xml_name
       when "class" # reserved identifier in BB/CS
         bb_attr_name = "class_name"
