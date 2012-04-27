@@ -63,7 +63,7 @@ module BB
     end
 
     def fully_qualified_class_name 
-      "window.aurora.#{@name}"
+      "window.#{@package_name}.#{@name}"
     end
     
     # Declare that this class is referenced from some other element.
@@ -236,7 +236,7 @@ module BB
 
       lines << [
         "### $a = alias for #{@package_name} namespace ###",
-        "$a = window.aurora", 
+        "$a = window.#{@package_name}", 
         "@from_xml1: (xml, object_with_id) ->",
         gen_from_xml_body(), "",
         
