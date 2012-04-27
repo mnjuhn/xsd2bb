@@ -1,7 +1,2 @@
-These AS3 files are from the old network editor. They were input to the code generator. Now, the methods in them should be added afterwords, using 
-
-  MyClass::my_method = (x) -> .. 
-
-The resolve/encode methods are particularly important, since they need to be there for xml import/export to do the right thing.
-
-There are also constructors with defaults, utility methods, etc.
+This directory should remain empty. Static extensions should be added 
+to scenario-editor
