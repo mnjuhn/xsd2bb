@@ -28,7 +28,7 @@ This also installs rubygems. On other platforms (linux,mac, cygwin, etc), rubyge
 
 Finally:
 
-  gem install nokigiri
+  gem install nokogiri
  
 (You may need sudo for some of the above.)
 
