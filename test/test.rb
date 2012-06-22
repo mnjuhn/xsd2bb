@@ -36,7 +36,7 @@ FileUtils.rm_rf out_dir
 
 begin
   gen_opts = {
-    :pkg_name       => "aurora",
+    :pkg_name       => "#{schema_name}",
     :out_dir        => out_dir
   }
 
